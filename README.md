@@ -1,2 +1,5 @@
-# oci-handson
-oci-handson
+# OCIハンズオンについて
+
+## VTAP.md
+以下を学ぶことができるハンズオンとなっています
+- VTAPの構築
