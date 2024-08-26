@@ -12,6 +12,9 @@
 - パブリック・サブネットにコンピュート・インスタンスの作成が完了していること
 - パブリック・サブネットにSSH接続が可能なこと
 
+※※※ここに、前提のイメージを入れる※※※
+（クライアント-----SSH------OCI-VCN-PublicSubnet-Compute
+
 下記がこのハンズオンで作成できる構成イメージです。
 ![image](https://github.com/user-attachments/assets/21dafe69-7513-4374-9eb8-55c5d75dbb60)
 
