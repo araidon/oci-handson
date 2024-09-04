@@ -38,6 +38,7 @@ ncatコマンドとは
 ## 4. NLBの作成
 orasejapanはMAX NLB制限にひっかかって断念。
 
+Flexible Network Load Balancer Count	max-nlb-flexible-count の制限解除リクエスト必須
 
 ## 5. VTAPの作成
 ## 6. 確認
