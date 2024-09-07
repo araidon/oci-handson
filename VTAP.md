@@ -44,7 +44,26 @@ Flexible Network Load Balancer Count	max-nlb-flexible-count の制限解除リ�
 
 基本的にチュートリアルの通りでOK
 要所要所で画像いれないとわけわかんなくなるので作る
+最初にVTAPについて詳細を解説する。
+解説元はSpeakerdeckで
+https://speakerdeck.com/ocise/oci-jia-xiang-tesutoakusesupointo-vtap-gai-yao
+
+
 
 ## 6. 確認
+デモにする
 
-※telnetはやらない
+## 確認
+このコマンドの意味
+
+（ターゲット・インスタンスに送信されるヘルスチェックのリクエストを受け入れ、レスポンスを返すため、ここではncatコマンドを用います。まずは以下のコマンドでnmap-ncatパッケージをインストールします）
+ncコマンドとは
+
+(UDPサーバを建て、NLBのヘルスチェックのリクエストを待機します)
+ while true; do (echo "response") | nc -lu 49152 -i 1; done > /dev/null 2>&1 &
+
+(サーバ・インスタンスからミラーリングされて流れてくるパケットを待ち受けます)
+ sudo tcpdump src host 10.0.1.2 -vv -i ens3
+
+ 
+
