@@ -76,5 +76,6 @@ ncコマンドとは
 
 > src host HOST	パケットの送信元ホストがHOSTであれば真
 > -vv	-vよりも詳細に出力する（NFS応答パケットの追加フィールドなども表示される）
-> -i INTERFACE	ネットワーク・インターフェースINTERFACEを監視する 
+> -i INTERFACE	ネットワーク・インターフェースINTERFACEを監視する
+> linuxのデフォルトのNIC名はens3
 
