@@ -68,6 +68,9 @@ ncコマンドとは
 –i interval
 テキスト行の送受信間隔 (interval) の遅延時間を指定します。
 
+echoをつけて、responseを受け取ったときの動作とするサーバにする。
+responseは、NLBで指定している。
+
 (UDPサーバを建て、NLBのヘルスチェックのリクエストを待機します)
  while true; do (echo "response") | nc -lu 49152 -i 1; done > /dev/null 2>&1 &
 
