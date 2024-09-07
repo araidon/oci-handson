@@ -59,11 +59,22 @@ https://speakerdeck.com/ocise/oci-jia-xiang-tesutoakusesupointo-vtap-gai-yao
 （ターゲット・インスタンスに送信されるヘルスチェックのリクエストを受け入れ、レスポンスを返すため、ここではncatコマンドを用います。まずは以下のコマンドでnmap-ncatパッケージをインストールします）
 ncコマンドとは
 
+–l
+リモートホストへの接続を開始せずに、着信する接続を待機します。
+
+–u
+デフォルトのオプションである TCP の代わりに UDP を使用します。
+
+–i interval
+テキスト行の送受信間隔 (interval) の遅延時間を指定します。
+
 (UDPサーバを建て、NLBのヘルスチェックのリクエストを待機します)
  while true; do (echo "response") | nc -lu 49152 -i 1; done > /dev/null 2>&1 &
 
 (サーバ・インスタンスからミラーリングされて流れてくるパケットを待ち受けます)
  sudo tcpdump src host 10.0.1.2 -vv -i ens3
 
- 
+> src host HOST	パケットの送信元ホストがHOSTであれば真
+> -vv	-vよりも詳細に出力する（NFS応答パケットの追加フィールドなども表示される）
+> -i INTERFACE	ネットワーク・インターフェースINTERFACEを監視する 
 
