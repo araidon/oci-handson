@@ -254,6 +254,24 @@ while true; do (echo "response") | nc -lu 49152 -i 1; done > /dev/null 2>&1 &
 
 ## 4. 動作確認
 
+1. パブリックサブネット用VMのSSHと、TargetVM用の2画面を用意する。
+2. (TargetVM)以下のコマンドを実行して、ミラーリングされたパケットを可視化できるようにする。
+
+```
+sudo tcpdump src host 10.0.1.2 -vv -i ens3
+```
+
+4. (PublicVM)以下のコマンドを実行して、Ping受信サーバにPingを実行する
+
+```
+ping -c 5 10.0.1.2
+```
+
+6. (TargetVM）Pingの実行結果が見れるようになっていること（＝ミラーリング出来ていること）を確認する
+
+
+<!-- 以下コメントアウト
+
 ## Extra. VPCフローログの設定
 
 
@@ -320,3 +338,4 @@ responseは、NLBで指定している。
 > -i INTERFACE	ネットワーク・インターフェースINTERFACEを監視する
 > linuxのデフォルトのNIC名はens3
 
+ -->
