@@ -10,11 +10,9 @@
    - 本ハンズオンはVCN[10.0.0.0/16],パブリックサブネット[10.0.0.0/24],プライベートサブネット[10.0.1.0/24]を前提としています
 - パブリック・サブネットにSSH接続が可能な環境があること
 
-※※※ここに、前提のイメージを入れる※※※
-（クライアント-----SSH------OCI-VCN-PublicSubnet-Compute
+・ハンズオン完成イメージ
+![VTAP完成イメージ](https://github.com/user-attachments/assets/09bb4643-c8fb-48d0-9ae3-1e6f19f5619d)
 
-下記がこのハンズオンで作成できる構成イメージです。
-![image](https://github.com/user-attachments/assets/21dafe69-7513-4374-9eb8-55c5d75dbb60)
 
 ## 2. 動作確認用事前準備
 
@@ -113,7 +111,7 @@ ping -c 5 10.0.1.2
 ### 動作確認手順まとめ
 ここまででVTAPの動作確認の準備が完了です。
 
-<ここまでのまとめ絵をいれる>
+![VTAP途中イメージ](https://github.com/user-attachments/assets/3f42f2fa-ce1f-4d87-9223-3153cabf531e)
 
 
 
