@@ -249,6 +249,7 @@ while true; do (echo "response") | nc -lu 49152 -i 1; done > /dev/null 2>&1 &
 
 ここまででVTAP設定が完了しました。
 ・ハンズオン完成イメージ（再掲）
+
 ![VTAP完成イメージ](https://github.com/user-attachments/assets/09bb4643-c8fb-48d0-9ae3-1e6f19f5619d)
 
 
@@ -269,6 +270,7 @@ ping -c 5 10.0.1.2
 
 6. (TargetVM）Pingの実行結果が見れるようになっていること（＝ミラーリング出来ていること）を確認する
 
+![CleanShot 2024-09-09 at 19 55 14](https://github.com/user-attachments/assets/e9fd0e11-969d-4942-aeb6-e994d9253e1e)
 
 
 
