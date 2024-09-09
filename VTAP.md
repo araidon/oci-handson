@@ -67,14 +67,48 @@
 ||プライベートIPv4アドレス|プライベートIPv4アドレスの手動割当て→10.0.1.3|
 |SSHキーの追加||キーペアの自動生成（＆キーのダウンロード）<br>or 作成済みの公開キーのアップロード|
 
+・ここまでで以下の3台のComputeインスタンスを作成
+
 ![CleanShot 2024-09-09 at 15 29 05](https://github.com/user-attachments/assets/51164911-05f3-4ec5-ab87-852cd010c2cd)
 
 
 ### 2-4. 設定1. プライベートサブネットのセキュリティリスト編集( ping許可用)
+1. コンソールのナビゲーションメニューから [ネットワーキング]→ [仮想クラウド・ネットワーク]を選択
+2. 右ペインから、対象のVCNの名前部分をクリック
+3. 画面右下のサブネット一覧からプライベート・サブネットの名前部分をクリック
+4. 画面右下のセキュリティ・リストの名前部分をクリック
+5. イングレス・ルールの追加をクリック
+6. 以下の設定で、Ping疎通の許可設定を作成。下記以外の部分はデフォルトのまま。
+
+|項目|設定値|
+|---|---|
+|ソースタイプ|CIDR|
+|ソースCIDR|10.0.0.0/24|
+|IPプロトコル|ICMP|
+|タイプ|8|
+|ソースタイプ|CIDR|
+
+![CleanShot 2024-09-09 at 15 41 40](https://github.com/user-attachments/assets/046411e3-aac7-482c-a90e-2f49895876e1)
 
 ### 2-5. 設定2. Ping受信サーバのファイアウォール停止
+1. Ping受信サーバ（ServerVM）にSSHログインする（ClientVMを踏み台にしてのSSH or CloudShellでのログイン)
+2. 以下のコマンドを入力して、ServerVM内のファイアウォールを停止する
+
+```
+sudo systemctl stop firewalld
+```
 
 ### 2-6. Ping受信確認
+1. パブリックサブネットのサーバ（ClientVM）にSSHログインする
+2. 以下のコマンドを入力して、Ping受信サーバにpingする。
+
+```
+ping -c 5 10.0.1.2
+```
+
+3. 正常にコマンドが成功することを確認（5 packets transmitted, 5 received, 0% packet loss)
+![CleanShot 2024-09-09 at 16 21 29](https://github.com/user-attachments/assets/d4e6dca3-260a-4383-bf5a-47ca95010e0c)
+
 
 <ここまでのまとめ絵をいれる>
 
