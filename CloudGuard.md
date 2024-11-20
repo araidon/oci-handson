@@ -5,6 +5,10 @@
 ## 1. 前提
 
 - Cloud Guardが有効化済みであること
+
+![CleanShot 2024-11-21 at 07 32 48](https://github.com/user-attachments/assets/c45db3be-8d57-4df8-92c3-8b6900d1b431)
+
+
 - Notificationのトピックが作成済みであること
 
 ## 2. ターゲットの作成
