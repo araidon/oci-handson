@@ -152,6 +152,7 @@ OCIコンソール画面
 | 暗号化 | Oracle管理キーを使用した暗号化 |
 
 その他、デフォルトのままで作成
+
 ![image.png](https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/276568/3fa8adf9-3ccf-33c2-a32f-f9d2b3331a50.png)
 
 # 2. AWSの作業用EC2に、OCI接続用設定を実施
@@ -160,16 +161,20 @@ EC2の作業ユーザーのホームディレクトリに、 **./.oci/config** �
 # 2-1. OCIコンソールから、APIキーを作成
 OCIコンソール画面
 → 「ユーザー設定」を選択
+
 ![image.png](https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/276568/e3da84b0-01bb-d721-8716-19d5a36e14e8.png)
 
 左下、リソースの「APIキー」→「APIキーの追加」を選択
+
 ![image.png](https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/276568/e237f4eb-456f-c4a0-df9d-a085d86cbea1.png)
 
 「秘密キーのダウンロード」を押下し、保存後に、「追加」を選択
+
 ![image.png](https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/276568/dfdd5590-27cc-1e75-3c85-57339fdb318b.png)
 
 構成ファイルのプレビューの内容をコピーします。
 後で利用しますので、テキストエディタ等に保存してください。
+
 ![image.png](https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/276568/b24dd44d-c6ae-2be7-1121-49d14309654b.png)
 
 ## 2-2. 作業用EC2に、OCI構成ファイルを作成
@@ -203,9 +208,6 @@ $
 ```
 
 # 3. AWSの作業用EC2に、MySQL Shellをインストール
-:::note info
-既にインストール済の場合は手順4に進んでください。
-:::
 
 以下公式の手順を参照してインストールします。
 https://dev.mysql.com/doc/mysql-shell/8.0/ja/mysql-shell-install-linux-quick.html
