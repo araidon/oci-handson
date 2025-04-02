@@ -128,7 +128,7 @@ mysql> show columns from employees;
 
 </div></details>
 
-# 移行フロー
+# 手順
 
 1. OCIのObject Storageに、Dumpファイル保存用バケットを作成
 1. AWSの作業用EC2に、OCI接続用設定を実施
