@@ -1,17 +1,19 @@
+# OCIハンズオン-HeatWave Replication編
+
 AWS RDS for MySQLからMDSに移行を実施する際、様々な手法/手段が考えられますが今回はMySQLの機能を利用したレプリケーションを実施します。
-MDSは仕様上、RDSとは異なりパブリックエンドポイントを持つことは現時点(2025年4月時点)ではできません。
+HeatWave MySQLは仕様上、RDSとは異なりパブリックエンドポイントを持つことは現時点(2025年4月時点)ではできません。
 
 # 作業の流れ
 1. AWSとOCI間でVPN接続した環境の構築
 1. OCI ComputeにてMySQLクライアントのセットアップ
 1. RDSの構築及び、レプリケーションに向けたセットアップ
-1. RDS→MDSへのレプリケーション設定
+1. RDS→HeatWave MySQLへのレプリケーション設定
 1. 同期確認
 
 ![image.png](https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2471135/c4c81e14-d3ad-6662-7b46-e60091fb2544.png)
 
 # 1. AWSとOCI間でVPN接続した環境の構築
-OCI MDSはパブリックエンドポイントを持つことができないため、AWSとOCIをVPN接続する必要があります。
+OCI HeatWave MySQLはパブリックエンドポイントを持つことができないため、AWSとOCIをVPN接続する必要があります。
 今回、VPN接続の設定方法は以下記事を参考にしました。
 
 https://qiita.com/yama6/items/c188de191269cb604341
