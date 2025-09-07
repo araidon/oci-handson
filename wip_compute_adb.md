@@ -1,22 +1,5 @@
 # OCI Hands-on: Compute (Windows) + Autonomous Database (Private Endpoint)
 
-## 目次
-1. [目的](#目的)
-2. [アーキテクチャ](#アーキテクチャ)
-3. [前提条件](#前提条件)
-4. [手順](#手順)
-   - [Step 1. VCN 作成（最小構成）](#step-1-vcn-作成最小構成)
-   - [Step 2. Windows Compute 作成 & RDP](#step-2-windows-compute-作成--rdp)
-   - [Step 3. Autonomous Database（ATP, Private Endpoint）作成](#step-3-autonomous-databaseatp-private-endpoint作成)
-   - [Step 4. SQL Developer のインストール（Windows）](#step-4-sql-developer-のインストールwindows)
-   - [Step 5. Wallet（Client Credentials）のダウンロード](#step-5-walletclient-credentialsのダウンロード)
-   - [Step 6. Wallet を Windows Compute にコピー（クリップボード経由）](#step-6-wallet-を-windows-compute-にコピークリップボード経由)
-   - [Step 7. SQL Developer で接続](#step-7-sql-developer-で接続)
-   - [Step 8. 動作確認（SQL 実行）](#step-8-動作確認sql-実行)
-5. [まとめ](#まとめ)
-
----
-
 ## 目的
 - OCI上に **Windows Compute** と **Autonomous Database (ATP)** を構築  
 - **Private Endpoint** を利用し、Windows から ADB へ接続確認  
@@ -38,24 +21,45 @@
 
 ## 手順
 
-### Step 1. VCN 作成（最小構成）
-1. **VCNウィザード**で以下を一括作成  
-   - VCN: `handson-vcn`  
-   - Public Subnet: `10.0.1.0/24`（Windows 用）  
-   - Private Subnet: `10.0.2.0/24`（ADB Private Endpoint 用）  
-   - Internet Gateway: 有効化 / NAT Gateway: 有効化  
-2. ルート表はウィザード既定のまま利用
+### Step 1. VCN 作成
+※本手順は、VCN作成済の場合は省略
+1. コンソールのナビゲーションメニューから [ネットワーキング]→ [仮想クラウド・ネットワーク]を選択
+2. 右ペインにて、**対象のコンパートメントが選ばれていること**を確認
+3. 右ペインの「アクション」から、[VCNウィザードの起動]をクリック
 
-![図: VCNウィザード設定（Public/Private同時作成）](image-placeholder)
+<img width="40%" height="40%" alt="CleanShot 2025-09-07 at 16 04 50" src="https://github.com/user-attachments/assets/0c82cbb1-007f-4f4d-87a4-a5c9966c6acf" />
+
+
+
+4. VCNウィザードで以下を一括作成
+   
+|項目|設定値|備考|
+|---|---|---|
+|接続タイプ|インターネット接続性を持つVCNの作成||
+|VCN名|handson-vcn|任意の名前でOK|
+|VCN IPv4 CIDRブロック|10.0.0.0/16||
+|Public Subnet|10.0.1.0/24|（Windows Server用）|
+|Private Subnet|10.0.2.0/24|（ADB Private Endpoint 用）|
 
 ---
 
 ### Step 2. Windows Compute 作成 & RDP
-1. **Compute → インスタンス作成**  
-   - 名前: `handson-win`  
-   - 画像: *Windows Server 2022*  
-   - サブネット: *Public Subnet*  
-   - その他は既定でOK（RDP の受信ルールを自分のグローバルIPに絞るのを推奨）  
+1. コンソールのナビゲーションメニューから [コンピュート]→ [インスタンス]を選択
+2. 右ペインにて、**対象のコンパートメントが選ばれていること**を確認
+3. 右ペインの「アクション」から、[インスタンスの作成]をクリック
+
+|項目|設定値|備考|
+|---|---|---|
+|名前|handson-win|任意の名前でOK|
+|イメージの変更|Windows Server 2022 Standard Core|追加のライセンス料金|
+|シェイプの変更|||
+|シェイプ名|VM.Standard.E4.Flex||
+|OCPUの数|2||
+|メモリー量|32||
+|ネットワーキング|先ほど作成したVCNの`パブリックサブネット`||
+
+※以下確認途中
+
 2. 起動後、**パブリックIP へ RDP** で接続し、管理者パスワードを設定  
 
 ![図: Computeインスタンス作成（Windows Server 2022 選択）](image-placeholder)
