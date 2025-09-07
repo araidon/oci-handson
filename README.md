@@ -1,3 +1,5 @@
+[English version is available below](#english-version)
+
 # OCIハンズオンについて
 
 Oracle Cloud Infrastructure (OCI) の主要サービスを実践的に学習できるハンズオン集です。ネットワーク監視、セキュリティ、データベース移行・レプリケーション、プライベート接続など、実務で重要な分野をカバーしています。
@@ -82,3 +84,93 @@ Oracle Cloud Infrastructure (OCI) の主要サービスを実践的に学習で�
 
 改善提案やバグ報告は、Issueまたはプルリクエストでお寄せください。
 
+---
+
+# English Version
+
+## About OCI Hands-on Collection
+
+This is a comprehensive hands-on collection for learning Oracle Cloud Infrastructure (OCI) key services practically. It covers important areas for real-world implementations including network monitoring, security, database migration/replication, and private connectivity.
+
+## Hands-on Summary
+
+| Hands-on | Difficulty | Duration | Key Learning Topics |
+|----------|------------|----------|---------------------|
+| VTAP | ⭐⭐ | 60 min | Network monitoring, packet analysis |
+| Cloud Guard | ⭐ | 30 min | Security monitoring, alert configuration |
+| HeatWave Migration | ⭐⭐⭐ | 90 min | Database migration, MySQL Shell |
+| HeatWave Replication | ⭐⭐⭐⭐ | 120 min | Replication, multi-cloud |
+| Compute + ADB | ⭐⭐ | 75 min | Private connectivity, Wallet configuration |
+
+## Hands-on List
+
+### 1. VTAP (`VTAP.md`)
+**Network Monitoring & Packet Analysis**
+- Building VTAP (Virtual Test Access Point) environment
+- Capturing and verifying ping (ICMP) traffic
+- Network traffic monitoring and analysis techniques
+
+### 2. Cloud Guard (`CloudGuard.md`)
+**Security Monitoring & Threat Detection**
+- Cloud Guard detector operation verification
+- Security alert email notification setup
+- Object Storage public access detection demo
+
+### 3. HeatWave Migration (`HeatWave_migration.md`)
+**Database Migration**
+- Creating dump files using MySQL Shell
+- Migration from AWS RDS for MySQL to OCI MySQL HeatWave Database Service
+- Large-scale data migration via Object Storage
+
+### 4. HeatWave Replication (`HeatWave_replication.md`)
+**Database Replication**
+- Real-time replication from AWS RDS for MySQL to HeatWave MySQL
+- Building VPN connection environment between AWS and OCI
+- MySQL replication configuration using GTID
+
+### 5. Compute + Autonomous Database (`wip_compute_adb.md`) 🚧
+**Private Database Connectivity**
+- Building Windows Compute and Autonomous Database (ATP)
+- Secure connectivity using Private Endpoint
+- Connection verification and Wallet configuration with SQL Developer
+
+## Learning Objectives
+
+Through this hands-on collection, you can acquire the following skills:
+
+- **Network Monitoring**: Packet capture and analysis using VTAP
+- **Security Operations**: Threat detection and alert configuration with Cloud Guard
+- **Database Migration**: Migration procedures for actual workloads
+- **Replication**: Data synchronization in multi-cloud environments
+- **Private Connectivity**: Building secure database connections
+
+## Prerequisites
+
+### Common Requirements
+- Access permissions to OCI tenancy
+- Appropriate IAM policy configuration
+- Basic knowledge of VCN (Virtual Cloud Network)
+
+### Hands-on Specific Requirements
+- **VTAP**: Compute instance creation permissions, network configuration permissions
+- **Cloud Guard**: Cloud Guard management permissions, Notification configuration permissions
+- **HeatWave Migration**: AWS environment access, MySQL Shell usage experience
+- **HeatWave Replication**: AWS/OCI multi-cloud environment, VPN configuration permissions
+- **Compute + ADB**: Windows Server operation experience, SQL Developer usage experience
+
+## Getting Started
+
+1. **Select the hands-on you want to learn**
+   - Detailed procedures are documented in each `.md` file
+   - Progressive skill development by following them in order
+
+2. **Verify prerequisites**
+   - Ensure you have the necessary permissions and resources
+
+## Contribution
+
+Please submit improvement suggestions or bug reports via Issues or Pull Requests.
+
+---
+
+**Happy Learning with OCI! 🎉**
