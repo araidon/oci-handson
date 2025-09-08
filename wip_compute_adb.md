@@ -61,6 +61,23 @@
 <img width="80%" height="80%" alt="CleanShot 2025-09-08 at 09 31 01" src="https://github.com/user-attachments/assets/aefeb07f-601a-431d-98e2-7b58d3d7dc1b" />
 <img width="80%" height="80%" alt="CleanShot 2025-09-08 at 09 38 02" src="https://github.com/user-attachments/assets/639c4bd4-a018-46de-890a-f5c0bd7ea289" />
 
+6. プライベートサブネットに、ATPへの接続用のポートを登録
+[仮想クラウド・ネットワーク]
+→ [handon-vcn]※今回作成したVCN
+→ [セキュリティ]タブ
+→ [Default Security List for handson-vcn]※ウィザードで作成された、Publicサブネット用のセキュリティリスト
+→ [セキュリティ・ルール]
+→ [イングレス・ルールの追加]
+
+項目|設定値|備考|
+|---|---|---|
+|ソースCIDR|10.0.0.0/16|RDP接続元のIPアドレス、要件によって絞ってください|
+|宛先ポート範囲|1521||
+
+<img width="80%" height="80%" alt="CleanShot 2025-09-08 at 18 47 33" src="https://github.com/user-attachments/assets/98bada82-8096-4da8-9af5-6a711b760257" />
+<img width="80%" height="80%" alt="CleanShot 2025-09-08 at 09 31 01" src="https://github.com/user-attachments/assets/aefeb07f-601a-431d-98e2-7b58d3d7dc1b" />
+<img width="80%" height="80%" alt="CleanShot 2025-09-08 at 18 49 40" src="https://github.com/user-attachments/assets/0456577f-fe9d-415f-829c-ab29c3a424b3" />
+
 ---
 
 ### Step 2. Windows Compute 作成 & RDP
@@ -136,8 +153,6 @@
 - インポート・プリファレンスの確認 → いいえ
 - Oracle使用状況トラッキング → OK
 
-![図: SQL DeveloperのZIP展開と初回起動](image-placeholder)
-
 ---
 
 ### Step 5. Wallet（Client Credentials）のダウンロード
@@ -147,60 +162,56 @@
 4. ダイアログで **Wallet パスワード**を入力して **Download**  
    - 例: ダウンロードファイル名 `Wallet_handson-atp.zip`  
 
-![図: ADB → DB Connection → Download Wallet 画面（入力箇所を強調）](image-placeholder)
-
 ---
 
 ### Step 6. Wallet を Windows Compute にコピー（クリップボード経由）
-1. RDP接続時に **クリップボード共有を有効化**  
-   - 「ローカルリソース」タブ → 「クリップボード」にチェック  
-2. 自分のPCでダウンロードした Wallet ZIP をコピー（Ctrl+C）  
-3. RDP で接続している Windows 内で貼り付け（Ctrl+V）  
+1. コンソールのナビゲーションメニューから [Oracle Database]→ [Autonomous Database]を選択
+2. 作成したATPを選択
+3. コンソール上部の[データベース接続]をクリック
+4. `インスタンス・ウォレット`が選択されていることを確認し、[ウォレットのダウンロード]をクリック
+5. 任意のパスワードを設定し、ダウンロード
+6. RDP接続時に **クリップボード共有を有効化**  
+7. 自分のPCでダウンロードした Wallet ZIP をコピー（Ctrl+C）  
+8. RDP で接続している Windows 内で貼り付け（Ctrl+V）  
    - 例: `C:\wallet_handson\Wallet_handson-atp.zip` に保存  
-4. ZIP を右クリック → 「すべて展開」で展開  
-   - 中に `tnsnames.ora / sqlnet.ora / cwallet.sso / ewallet.p12` などが含まれる  
-
-![図: Windows RDP にコピーして展開した Wallet フォルダ](image-placeholder)
-
-#### 注意点
-- RDP接続時にクリップボード共有が無効だとコピーできません  
-- Wallet ZIP は展開前に中身を変更しない  
-- 展開先フォルダは英数字のみで空白や日本語を含まないことを推奨  
 
 #### トラブルシュート
 | 現象 | 確認/対処 |
 |-------|------------|
 | RDP内で貼り付けできない | RDP接続オプションで「クリップボード共有」が有効か確認 |
 | Wallet ZIP が開けない/破損 | 自分のPCでダウンロードしたZIPが正常か確認し、再ダウンロード |
-| 展開後にファイルが足りない | ZIPを展開せずコピーしていないか確認。必ず「すべて展開」で解凍 |
 
 ---
 
 ### Step 7. SQL Developer で接続
-1. SQL Developer を起動 → 左の *Connections* で **New**  
-2. 入力例（Cloud Wallet 方式）  
-   - **Connection Name**: `handson`  
-   - **Username**: `ADMIN`  
-   - **Password**: ADB作成時に設定したもの  
-   - **Configuration File**: `C:\wallet_handson\Wallet_handson-atp.zip`  
-3. **Test → Save → Connect**  
+1. SQL Developer を起動 → 左の *接続* で **+ボタンをクリック**  
+2. 入力例（Cloud Wallet 方式）
 
-![図: SQL Developer 新規接続（Cloud Wallet ZIP 指定）](image-placeholder)
+|項目|設定値|備考|
+|---|---|---|
+|Name|handson|任意の名前でOK|
+|データベースのタイプ|Oracle||
+|ユーザー名|Ademin||
+|パスワード|ATP作成時に設定したパスワード||
+|接続タイプ|クラウド・ウォレット||
+|構成ファイル|参照にて、対象のウォレットファイルを指定||
+|ワークロード・タイプ|トランザクション処理||
+
+3. [テスト]をクリック
+4. テストが成功したら、[保存]をクリック
+5. [接続]をクリック
+
+<img width="80%" height="80%" alt="CleanShot 2025-09-08 at 19 07 20" src="https://github.com/user-attachments/assets/d6c5538b-e3db-4575-bdb9-375b9591480b" />
 
 #### 注意点
-- Cloud Wallet方式は ZIP を展開不要  
-- 展開して使う場合は `TNS_ADMIN` に展開フォルダを指定する  
 - SQL Developer 起動後に **Test** を必ず実行  
-
-#### トラブルシュート
-| 現象 | 確認/対処 |
-|-------|------------|
-| ORA-12154 / TNS:could not resolve | TNS_ADMIN の設定や tnsnames.ora の存在を確認 |
-| ORA-29024 / invalid certificate | Wallet 内の証明書を改変していないか確認 |
-| 接続できない | Cloud Wallet 方式で直接 ZIP 指定 or 展開フォルダの内容確認 |
 
 ---
 
 ### Step 8. 動作確認（SQL 実行）
+左ペインにSQLを入力してみて、三角矢印で実行し、結果が返ってくることを確認
 ```sql
 SELECT sysdate FROM dual;
+```
+
+<img width="80%" height="80%" alt="CleanShot 2025-09-08 at 19 11 28" src="https://github.com/user-attachments/assets/6f9176a3-f7d7-488d-aa5c-7bffcd224538" />
