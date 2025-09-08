@@ -41,7 +41,7 @@ Oracle Cloud Infrastructure (OCI) の主要サービスを実践的に学習で�
 - AWSとOCI間でのVPN接続環境の構築
 - GTIDを使用したMySQL レプリケーション設定
 
-### 5. Compute + Autonomous Database編 (`wip_compute_adb.md`) 🚧
+### 5. Compute + Autonomous Database編 (`compute_adb.md`) 
 **プライベートデータベース接続**
 - Windows ComputeとAutonomous Database (ATP)の構築
 - Private Endpointを利用した安全な接続
@@ -128,7 +128,7 @@ This is a comprehensive hands-on collection for learning Oracle Cloud Infrastruc
 - Building VPN connection environment between AWS and OCI
 - MySQL replication configuration using GTID
 
-### 5. Compute + Autonomous Database (`wip_compute_adb.md`) 🚧
+### 5. Compute + Autonomous Database (`compute_adb.md`) 
 **Private Database Connectivity**
 - Building Windows Compute and Autonomous Database (ATP)
 - Secure connectivity using Private Endpoint
