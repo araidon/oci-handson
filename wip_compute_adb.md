@@ -59,7 +59,7 @@
 
 <img width="80%" height="80%" alt="CleanShot 2025-09-08 at 09 29 42" src="https://github.com/user-attachments/assets/32ffea30-4de3-4bde-83a0-2aedf788c941" />
 <img width="80%" height="80%" alt="CleanShot 2025-09-08 at 09 31 01" src="https://github.com/user-attachments/assets/aefeb07f-601a-431d-98e2-7b58d3d7dc1b" />
-<img width="1381" height="260" alt="CleanShot 2025-09-08 at 09 38 02" src="https://github.com/user-attachments/assets/639c4bd4-a018-46de-890a-f5c0bd7ea289" />
+<img width="80%" height="80%" alt="CleanShot 2025-09-08 at 09 38 02" src="https://github.com/user-attachments/assets/639c4bd4-a018-46de-890a-f5c0bd7ea289" />
 
 ---
 
@@ -78,7 +78,6 @@
 |メモリー量|32||
 |ネットワーキング|先ほど作成したVCNの`パブリックサブネット`||
 
-※以下確認途中
 
 2. 起動後、インスタンス・アクセス部分を確認し、**パブリックIP へ RDP** で接続
    
@@ -87,6 +86,7 @@
 <img width="50%" height="50%" alt="CleanShot 2025-09-08 at 09 40 25" src="https://github.com/user-attachments/assets/83c36a68-6b64-41b2-8ae2-6e79052a4400" />
 
 最初に、パスワードの変更が求められますので、OKを押してパスワード変更してください
+※英語キーボードと日本語キーボードで、記号の違いがある場合がありますのでご注意ください
 
 <img width="50%" height="50%" alt="CleanShot 2025-09-08 at 10 42 27" src="https://github.com/user-attachments/assets/72e5f508-67c4-4006-a8cd-b81df1fb199e" />
 
@@ -95,13 +95,26 @@
 ---
 
 ### Step 3. Autonomous Database（ATP, Private Endpoint）作成
-1. **Autonomous Database → Create**  
-   - DB名: `handson-atp`  
-   - ワークロード: *Transaction Processing*  
-   - OCPU: 2（Auto Scaling 有効のまま）  
-   - **Subnet: Private Subnet** を選択  
-   - **Private Endpoint: 有効** を選択  
-   - ライセンス: 環境に応じて（BYOL/License Included）  
+1. コンソールのナビゲーションメニューから [Oracle Database]→ [Autonomous Database]を選択
+2. 右ペインにて、**対象のコンパートメントが選ばれていること**を確認
+3. 右ペインのAutonomous Databaseの作成]をクリック
+
+|項目|設定値|備考|
+|---|---|---|
+|表示名|handson-atp|任意の名前でOK|
+|データベース名|handson-atp|任意の名前でOK|
+|ワークロード・タイプ|トランザクション処理||
+|データベース・バージョンの選択|19c or 23ai|AIサービスを試すのであれば23ai|
+|ECPU数|4|必要に応じて|
+|ストレージ|1024GB||
+|ADMINパスワード|任意に設定||
+|ネットワーク・アクセス|||
+|アクセス・タイプ|プライベート・エンドポイント・アクセスのみ|
+|仮想クラウド・ネットワーク|handson-vcn|Step1で作成したVCN|
+|サブネット|プライベート・サブネット|Step1で作成したプライベートサブネット|
+
+   
+  
 2. 作成完了まで待機（数分）  
 
 ![図: ADB作成（Private Endpoint 有効化の箇所を強調）](image-placeholder)
@@ -109,11 +122,19 @@
 ---
 
 ### Step 4. SQL Developer のインストール（Windows）
-1. Windows 上のブラウザで **SQL Developer ダウンロードページ** を開く  
-2. **Windows 64-bit (JDK 17 Included)** をダウンロード  
-3. ZIP を任意のフォルダに展開（例: `C:\tools\sqldeveloper`）  
-4. `sqldeveloper.exe` を実行して起動  
-   - 初回起動で SmartScreen が出たら「詳細情報→実行」を選択  
+1. Windows 上のブラウザで **SQL Developer ダウンロードページ** を開く
+   https://www.oracle.com/jp/database/sqldeveloper/technologies/download/
+2. **Windows 64-bit (JDK 17 Included)** をダウンロード
+
+<img width="50%" height="50%" alt="CleanShot 2025-09-08 at 10 52 51" src="https://github.com/user-attachments/assets/41e4b96a-acd1-4bd6-a69c-0bb9b65a3c50" />
+     
+3. Zipファイル圧縮後、`sqldeveloper.exe` を実行して起動  
+   - 初回起動で SmartScreen が出たら「詳細情報→実行」を選択
+
+ <img width="50%" height="50%" alt="CleanShot 2025-09-08 at 14 48 46" src="https://github.com/user-attachments/assets/3eac6d08-45f9-4a0b-b2d6-e38e0f99df28" />
+
+- インポート・プリファレンスの確認 → いいえ
+- Oracle使用状況トラッキング → OK
 
 ![図: SQL DeveloperのZIP展開と初回起動](image-placeholder)
 
