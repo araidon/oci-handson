@@ -41,6 +41,26 @@
 |Public Subnet|10.0.1.0/24|（Windows Server用）|
 |Private Subnet|10.0.2.0/24|（ADB Private Endpoint 用）|
 
+
+5. 作成完了後、作成したVCNを表示
+
+6. パブリックサブネットに、RDPのポートを登録
+[仮想クラウド・ネットワーク]
+→ [handon-vcn]※今回作成したVCN
+→ [セキュリティ]タブ
+→ [Default Security List for handson-vcn]※ウィザードで作成された、Publicサブネット用のセキュリティリスト
+→ [セキュリティ・ルール]
+→ [イングレス・ルールの追加]
+
+項目|設定値|備考|
+|---|---|---|
+|ソースCIDR|0.0.0.0/0|RDP接続元のIPアドレス、要件によって絞ってください|
+|宛先ポート範囲|3389||
+
+<img width="80%" height="80%" alt="CleanShot 2025-09-08 at 09 29 42" src="https://github.com/user-attachments/assets/32ffea30-4de3-4bde-83a0-2aedf788c941" />
+<img width="80%" height="80%" alt="CleanShot 2025-09-08 at 09 31 01" src="https://github.com/user-attachments/assets/aefeb07f-601a-431d-98e2-7b58d3d7dc1b" />
+<img width="1381" height="260" alt="CleanShot 2025-09-08 at 09 38 02" src="https://github.com/user-attachments/assets/639c4bd4-a018-46de-890a-f5c0bd7ea289" />
+
 ---
 
 ### Step 2. Windows Compute 作成 & RDP
@@ -51,7 +71,7 @@
 |項目|設定値|備考|
 |---|---|---|
 |名前|handson-win|任意の名前でOK|
-|イメージの変更|Windows Server 2022 Standard Core|追加のライセンス料金|
+|イメージの変更|Windows Server 2022 Standard|追加のライセンス料金|
 |シェイプの変更|||
 |シェイプ名|VM.Standard.E4.Flex||
 |OCPUの数|2||
@@ -60,9 +80,17 @@
 
 ※以下確認途中
 
-2. 起動後、**パブリックIP へ RDP** で接続し、管理者パスワードを設定  
+2. 起動後、インスタンス・アクセス部分を確認し、**パブリックIP へ RDP** で接続
+   
+ユーザー名と初期パスワードもインスタンス・アクセス部分を確認
 
-![図: Computeインスタンス作成（Windows Server 2022 選択）](image-placeholder)
+<img width="50%" height="50%" alt="CleanShot 2025-09-08 at 09 40 25" src="https://github.com/user-attachments/assets/83c36a68-6b64-41b2-8ae2-6e79052a4400" />
+
+最初に、パスワードの変更が求められますので、OKを押してパスワード変更してください
+
+<img width="50%" height="50%" alt="CleanShot 2025-09-08 at 10 42 27" src="https://github.com/user-attachments/assets/72e5f508-67c4-4006-a8cd-b81df1fb199e" />
+
+<img width="50%" height="50%" alt="CleanShot 2025-09-08 at 10 47 20" src="https://github.com/user-attachments/assets/5b69c9a5-81b1-4dde-8720-8eadf8ba444f" />
 
 ---
 
