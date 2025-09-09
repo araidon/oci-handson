@@ -8,7 +8,7 @@
 
 ## アーキテクチャ
 
-![図: ハンズオン全体構成（Public SubnetのWindowsからPrivate SubnetのADBへ接続）](image-placeholder)
+<img width="100%" height="100%" alt="CleanShot 2025-09-09 at 09 22 59@2x" src="https://github.com/user-attachments/assets/9e2abd15-45a9-4b38-b46c-9bdd7c9637f7" />
 
 ---
 
@@ -22,7 +22,6 @@
 ## 手順
 
 ### Step 1. VCN 作成
-※本手順は、VCN作成済の場合は省略
 1. コンソールのナビゲーションメニューから [ネットワーキング]→ [仮想クラウド・ネットワーク]を選択
 2. 右ペインにて、**対象のコンパートメントが選ばれていること**を確認
 3. 右ペインの「アクション」から、[VCNウィザードの起動]をクリック
