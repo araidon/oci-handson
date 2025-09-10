@@ -133,8 +133,6 @@
   
 2. 作成完了まで待機（数分）  
 
-![図: ADB作成（Private Endpoint 有効化の箇所を強調）](image-placeholder)
-
 ---
 
 ### Step 4. SQL Developer のインストール（Windows）
