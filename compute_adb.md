@@ -142,7 +142,7 @@
 
 <img width="50%" height="50%" alt="CleanShot 2025-09-08 at 10 52 51" src="https://github.com/user-attachments/assets/41e4b96a-acd1-4bd6-a69c-0bb9b65a3c50" />
      
-3. Zipファイル圧縮後、`sqldeveloper.exe` を実行して起動  
+3. Zipファイル解答後、`sqldeveloper.exe` を実行して起動  
    - 初回起動で SmartScreen が出たら「詳細情報→実行」を選択
 
  <img width="50%" height="50%" alt="CleanShot 2025-09-08 at 14 48 46" src="https://github.com/user-attachments/assets/3eac6d08-45f9-4a0b-b2d6-e38e0f99df28" />
