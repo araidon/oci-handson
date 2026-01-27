@@ -13,6 +13,7 @@ Oracle Cloud Infrastructure (OCI) の主要サービスを実践的に学習で�
 | HeatWave Migration編 | ⭐⭐⭐ | 90分 | データベース移行、MySQL Shell |
 | HeatWave Replication編 | ⭐⭐⭐⭐ | 120分 | レプリケーション、マルチクラウド |
 | Compute + ADB編 | ⭐⭐ | 75分 | プライベート接続、Wallet設定 |
+| ブートボリュームバックアップ編 | ⭐⭐ | 45分 | ブートボリュームバックアップ、インスタンス復元 |
 
 
 ## ハンズオン一覧
@@ -41,11 +42,17 @@ Oracle Cloud Infrastructure (OCI) の主要サービスを実践的に学習で�
 - AWSとOCI間でのVPN接続環境の構築
 - GTIDを使用したMySQL レプリケーション設定
 
-### 5. Compute + Autonomous Database編 (`compute_adb.md`) 
+### 5. Compute + Autonomous Database編 (`compute_adb.md`)
 **プライベートデータベース接続**
 - Windows ComputeとAutonomous Database (ATP)の構築
 - Private Endpointを利用した安全な接続
 - SQL Developerでの接続確認とWallet設定
+
+### 6. ブートボリュームバックアップ編 (`boot_volume_backup.md`)
+**インスタンス復元・クローン**
+- Computeインスタンスのブートボリュームバックアップ作成
+- バックアップからのブートボリュームリストア
+- リストアしたブートボリュームから新規インスタンス作成
 
 ## 学習目標
 
@@ -56,6 +63,7 @@ Oracle Cloud Infrastructure (OCI) の主要サービスを実践的に学習で�
 - **データベース移行**: 実際のワークロードを想定した移行手順
 - **レプリケーション**: マルチクラウド環境でのデータ同期
 - **プライベート接続**: セキュアなデータベース接続の構築
+- **バックアップ・リストア**: ブートボリュームバックアップによるインスタンス復元
 
 ## 前提条件
 
@@ -70,6 +78,7 @@ Oracle Cloud Infrastructure (OCI) の主要サービスを実践的に学習で�
 - **HeatWave Migration編**: AWS環境へのアクセス、MySQL Shell利用経験
 - **HeatWave Replication編**: AWS/OCIマルチクラウド環境、VPN設定権限
 - **Compute + ADB編**: Windows Server操作経験、SQL Developer利用経験
+- **ブートボリュームバックアップ編**: 稼働中のComputeインスタンス、SSHキーペア
 
 ## 開始方法
 
@@ -101,6 +110,7 @@ This is a comprehensive hands-on collection for learning Oracle Cloud Infrastruc
 | HeatWave Migration | ⭐⭐⭐ | 90 min | Database migration, MySQL Shell |
 | HeatWave Replication | ⭐⭐⭐⭐ | 120 min | Replication, multi-cloud |
 | Compute + ADB | ⭐⭐ | 75 min | Private connectivity, Wallet configuration |
+| Boot Volume Backup | ⭐⭐ | 45 min | Boot volume backup, instance restoration |
 
 ## Hands-on List
 
@@ -128,11 +138,17 @@ This is a comprehensive hands-on collection for learning Oracle Cloud Infrastruc
 - Building VPN connection environment between AWS and OCI
 - MySQL replication configuration using GTID
 
-### 5. Compute + Autonomous Database (`compute_adb.md`) 
+### 5. Compute + Autonomous Database (`compute_adb.md`)
 **Private Database Connectivity**
 - Building Windows Compute and Autonomous Database (ATP)
 - Secure connectivity using Private Endpoint
 - Connection verification and Wallet configuration with SQL Developer
+
+### 6. Boot Volume Backup (`boot_volume_backup.md`)
+**Instance Restoration & Cloning**
+- Creating boot volume backup of Compute instance
+- Restoring boot volume from backup
+- Creating new instance from restored boot volume
 
 ## Learning Objectives
 
@@ -143,6 +159,7 @@ Through this hands-on collection, you can acquire the following skills:
 - **Database Migration**: Migration procedures for actual workloads
 - **Replication**: Data synchronization in multi-cloud environments
 - **Private Connectivity**: Building secure database connections
+- **Backup & Restore**: Instance restoration using boot volume backup
 
 ## Prerequisites
 
@@ -157,6 +174,7 @@ Through this hands-on collection, you can acquire the following skills:
 - **HeatWave Migration**: AWS environment access, MySQL Shell usage experience
 - **HeatWave Replication**: AWS/OCI multi-cloud environment, VPN configuration permissions
 - **Compute + ADB**: Windows Server operation experience, SQL Developer usage experience
+- **Boot Volume Backup**: Running Compute instance, SSH key pair
 
 ## Getting Started
 
