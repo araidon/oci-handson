@@ -2,6 +2,8 @@
 
 Computeインスタンスのブートボリュームバックアップを作成し、そこから新規インスタンスを作成します。
 
+![ブートボリュームバックアップの流れ](images/boot_volume_backup/bvb_00_architecture.png)
+
 ## 1. 前提
 
 - 既存のComputeインスタンスが稼働中であること

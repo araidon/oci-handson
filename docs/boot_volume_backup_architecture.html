@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ブートボリュームバックアップ - アーキテクチャ図</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      background: #ffffff;
+      min-height: 100vh;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      padding: 40px;
+      color: #1e293b;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .title {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    .title h1 {
+      font-size: 2rem;
+      background: linear-gradient(90deg, #c74634, #f59e0b);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 10px;
+    }
+    .title p {
+      color: #64748b;
+      font-size: 1rem;
+    }
+
+    /* Flow Container */
+    .flow-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+
+    /* Step */
+    .step {
+      display: flex;
+      align-items: center;
+      gap: 30px;
+      width: 100%;
+      max-width: 900px;
+    }
+    .step-number {
+      width: 50px;
+      height: 50px;
+      background: linear-gradient(135deg, #c74634, #f59e0b);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+      font-size: 1.2rem;
+      flex-shrink: 0;
+    }
+    .step-content {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    /* Component Box */
+    .component {
+      background: #ffffff;
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease;
+      min-width: 160px;
+    }
+    .component:hover {
+      transform: translateY(-3px);
+    }
+    .component .icon {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+    }
+    .component h3 {
+      font-size: 0.95rem;
+      margin-bottom: 5px;
+      color: #1e293b;
+    }
+    .component p {
+      font-size: 0.8rem;
+      color: #64748b;
+    }
+
+    /* Instance */
+    .instance {
+      border: 2px solid #3b82f6;
+    }
+    .instance .icon { color: #3b82f6; }
+
+    /* Boot Volume */
+    .boot-volume {
+      border: 2px solid #8b5cf6;
+    }
+    .boot-volume .icon { color: #8b5cf6; }
+
+    /* Backup */
+    .backup {
+      border: 2px solid #f59e0b;
+    }
+    .backup .icon { color: #f59e0b; }
+
+    /* Restored Volume */
+    .restored-volume {
+      border: 2px solid #10b981;
+    }
+    .restored-volume .icon { color: #10b981; }
+
+    /* New Instance */
+    .new-instance {
+      border: 2px solid #22c55e;
+    }
+    .new-instance .icon { color: #22c55e; }
+
+    /* SSH */
+    .ssh {
+      border: 2px solid #06b6d4;
+    }
+    .ssh .icon { color: #06b6d4; }
+
+    /* Arrow */
+    .arrow {
+      color: #94a3b8;
+      font-size: 1.5rem;
+    }
+    .arrow-down {
+      color: #94a3b8;
+      font-size: 2rem;
+      margin: 10px 0;
+    }
+
+    /* Action Label */
+    .action-label {
+      background: #f1f5f9;
+      border-radius: 20px;
+      padding: 8px 16px;
+      font-size: 0.8rem;
+      color: #475569;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+    }
+    .action-label i {
+      color: #c74634;
+    }
+
+    /* OCI Console Box */
+    .oci-box {
+      border: 2px solid #c74634;
+      border-radius: 16px;
+      padding: 25px;
+      background: rgba(199, 70, 52, 0.02);
+      width: 100%;
+    }
+    .oci-box > .label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+      color: #c74634;
+      font-weight: bold;
+    }
+    .oci-box > .label img {
+      height: 24px;
+    }
+
+    /* Legend */
+    .legend {
+      margin-top: 40px;
+      background: #f8fafc;
+      border-radius: 12px;
+      padding: 20px 30px;
+      display: flex;
+      gap: 30px;
+      align-items: center;
+      flex-wrap: wrap;
+      justify-content: center;
+      border: 1px solid #e2e8f0;
+    }
+    .legend-title {
+      font-weight: bold;
+      color: #64748b;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.85rem;
+      color: #475569;
+    }
+    .legend-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+    .legend-dot.instance { background: #3b82f6; }
+    .legend-dot.volume { background: #8b5cf6; }
+    .legend-dot.backup { background: #f59e0b; }
+    .legend-dot.restored { background: #10b981; }
+    .legend-dot.new { background: #22c55e; }
+
+    /* Horizontal Flow */
+    .horizontal-flow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    /* Section Divider */
+    .section-divider {
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #e2e8f0, transparent);
+      margin: 30px 0;
+    }
+
+    /* Phase Label */
+    .phase-label {
+      text-align: center;
+      margin: 20px 0 15px;
+      color: #64748b;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    .phase-label::before,
+    .phase-label::after {
+      content: '';
+      width: 40px;
+      height: 1px;
+      background: #cbd5e1;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="title">
+      <h1><i class="fas fa-hdd"></i> ブートボリュームバックアップ</h1>
+      <p>既存インスタンスのバックアップから新規インスタンスを作成する流れ</p>
+    </div>
+
+    <!-- OCI Console Box -->
+    <div class="oci-box">
+      <div class="label">
+        <i class="fas fa-cloud" style="font-size: 1.5rem;"></i>
+        <span>Oracle Cloud Infrastructure Console</span>
+      </div>
+
+      <div class="flow-container">
+        <!-- Phase 1: Backup Creation -->
+        <div class="phase-label">バックアップ作成</div>
+
+        <div class="horizontal-flow">
+          <div class="component instance">
+            <div class="icon"><i class="fas fa-server"></i></div>
+            <h3>既存インスタンス</h3>
+            <p>稼働中のCompute</p>
+          </div>
+
+          <div class="arrow"><i class="fas fa-arrow-right"></i></div>
+
+          <div class="component boot-volume">
+            <div class="icon"><i class="fas fa-hdd"></i></div>
+            <h3>ブートボリューム</h3>
+            <p>OS・データ含む</p>
+          </div>
+
+          <div class="arrow"><i class="fas fa-arrow-right"></i></div>
+
+          <div class="action-label">
+            <i class="fas fa-camera"></i>
+            バックアップ作成
+          </div>
+
+          <div class="arrow"><i class="fas fa-arrow-right"></i></div>
+
+          <div class="component backup">
+            <div class="icon"><i class="fas fa-box-archive"></i></div>
+            <h3>バックアップ</h3>
+            <p>Object Storage保存</p>
+          </div>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <!-- Phase 2: Restore -->
+        <div class="phase-label">リストア & インスタンス作成</div>
+
+        <div class="horizontal-flow">
+          <div class="component backup">
+            <div class="icon"><i class="fas fa-box-archive"></i></div>
+            <h3>バックアップ</h3>
+            <p>保存済み</p>
+          </div>
+
+          <div class="arrow"><i class="fas fa-arrow-right"></i></div>
+
+          <div class="action-label">
+            <i class="fas fa-undo"></i>
+            リストア
+          </div>
+
+          <div class="arrow"><i class="fas fa-arrow-right"></i></div>
+
+          <div class="component restored-volume">
+            <div class="icon"><i class="fas fa-hdd"></i></div>
+            <h3>新ブートボリューム</h3>
+            <p>復元されたコピー</p>
+          </div>
+
+          <div class="arrow"><i class="fas fa-arrow-right"></i></div>
+
+          <div class="action-label">
+            <i class="fas fa-plus"></i>
+            インスタンス作成
+          </div>
+
+          <div class="arrow"><i class="fas fa-arrow-right"></i></div>
+
+          <div class="component new-instance">
+            <div class="icon"><i class="fas fa-server"></i></div>
+            <h3>新インスタンス</h3>
+            <p>同一環境を復元</p>
+          </div>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <!-- Phase 3: Verification -->
+        <div class="phase-label">接続確認</div>
+
+        <div class="horizontal-flow">
+          <div class="component new-instance">
+            <div class="icon"><i class="fas fa-server"></i></div>
+            <h3>新インスタンス</h3>
+            <p>パブリックIP取得</p>
+          </div>
+
+          <div class="arrow"><i class="fas fa-arrow-right"></i></div>
+
+          <div class="component ssh">
+            <div class="icon"><i class="fas fa-terminal"></i></div>
+            <h3>SSH接続</h3>
+            <p>opc@IP</p>
+          </div>
+
+          <div class="arrow"><i class="fas fa-arrow-right"></i></div>
+
+          <div class="action-label">
+            <i class="fas fa-check-circle" style="color: #22c55e;"></i>
+            OS・設定確認
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Legend -->
+    <div class="legend">
+      <span class="legend-title">凡例:</span>
+      <div class="legend-item">
+        <div class="legend-dot instance"></div>
+        <span>既存インスタンス</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot volume"></div>
+        <span>ブートボリューム</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot backup"></div>
+        <span>バックアップ</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot restored"></div>
+        <span>リストア済み</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot new"></div>
+        <span>新インスタンス</span>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
