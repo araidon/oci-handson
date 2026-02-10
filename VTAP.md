@@ -83,7 +83,6 @@
 |ソースCIDR|10.0.0.0/24|
 |IPプロトコル|ICMP|
 |タイプ|8|
-|ソースタイプ|CIDR|
 
 ![CleanShot 2024-09-09 at 15 41 40](https://github.com/user-attachments/assets/046411e3-aac7-482c-a90e-2f49895876e1)
 
@@ -141,7 +140,7 @@ sudo yum -y install nmap-ncat.x86_64
 nc -v
 ```
 
-3. 以下のコマンドを入力して、VTAP動作確認用にUDPサーバを建てる
+5. 以下のコマンドを入力して、VTAP動作確認用にUDPサーバを建てる
 (49152ポートでリクエストを受信する状態になります。)
 
 ```
@@ -216,7 +215,7 @@ while true; do (echo "response") | nc -lu 49152 -i 1; done > /dev/null 2>&1 &
 
 
 ### 3-5. VTAP作成
-1. コンソールのナビゲーションメニューから [ネットワーキング]→ [VTAP]を選択
+1. コンソールのナビゲーションメニューから [ネットワーキング]→ [Network Command Center] → [VTAP]を選択
 2. 右ペインの[VTAPの作成]をクリック
 3. 以下の設定で、VTAPを作成。下記以外の部分はデフォルトのまま。
 
@@ -262,13 +261,13 @@ while true; do (echo "response") | nc -lu 49152 -i 1; done > /dev/null 2>&1 &
 sudo tcpdump src host 10.0.1.2 -vv -i ens3
 ```
 
-4. (PublicVM)以下のコマンドを実行して、Ping受信サーバにPingを実行する
+3. (PublicVM)以下のコマンドを実行して、Ping受信サーバにPingを実行する
 
 ```
 ping -c 5 10.0.1.2
 ```
 
-6. (TargetVM）Pingの実行結果が見れるようになっていること（＝ミラーリング出来ていること）を確認する
+4. (TargetVM）Pingの実行結果が見れるようになっていること（＝ミラーリング出来ていること）を確認する
 
 ![CleanShot 2024-09-09 at 19 55 14](https://github.com/user-attachments/assets/e9fd0e11-969d-4942-aeb6-e994d9253e1e)
 
