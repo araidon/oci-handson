@@ -26,10 +26,10 @@
 |名前||ClientVM|
 |コンパートメントに作成||（自分のコンパートメント）|
 |イメージとシェイプ|イメージ|OracleLinux|
-||Shape|AMD - VM.Standard.E4.Flex|
+||Shape|AMD - VM.Standard.E5.Flex 等|
 |プライマリVNIC情報の編集|VCN|（作成済みのVCN）|
 ||サブネット|作成済みのパブリック・サブネット|
-|SSHキーの追加||キーペアの自動生成（＆キーのダウンロード）<br>or 作成済みの公開キーのアップロード|
+|SSHキーの追加||キーペアの自動生成（＆キーのダウンロード）<br>※3台すべて同じキーペアを使用|
 
 ### 2-2. Compute作成2.プライベートサブネットPing受信サーバ用
 1. コンソールのナビゲーションメニューから [コンピュート]→ [インスタンス]を選択
@@ -41,12 +41,12 @@
 |名前||ServerVM|
 |コンパートメントに作成||（自分のコンパートメント）|
 |イメージとシェイプ|イメージ|OracleLinux|
-||Shape|AMD - VM.Standard.E4.Flex|
+||Shape|AMD - VM.Standard.E5.Flex 等|
 |プライマリVNIC情報の編集|VCN|（作成済みのVCN）|
 ||サブネット|作成済みのプライベート・サブネット|
-||プライベートIPv4アドレス|プライベートIPv4アドレスの手動割当て→10.0.1.2|
-|SSHキーの追加||キーペアの自動生成（＆キーのダウンロード）<br>or 作成済みの公開キーのアップロード|
+|SSHキーの追加||キーペアの自動生成（＆キーのダウンロード）<br>※3台すべて同じキーペアを使用|
 
+※作成後、ServerVMのプライベートIPアドレスを控えておいてください。
 
 ### 2-3. Compute作成3.VTAP受信用
 1. コンソールのナビゲーションメニューから [コンピュート]→ [インスタンス]を選択
@@ -58,23 +58,24 @@
 |名前||TargetVM|
 |コンパートメントに作成||（自分のコンパートメント）|
 |イメージとシェイプ|イメージ|OracleLinux|
-||Shape|AMD - VM.Standard.E4.Flex|
+||Shape|AMD - VM.Standard.E5.Flex 等|
 |プライマリVNIC情報の編集|VCN|（作成済みのVCN）|
 ||サブネット|作成済みのプライベート・サブネット|
-||プライベートIPv4アドレス|プライベートIPv4アドレスの手動割当て→10.0.1.3|
-|SSHキーの追加||キーペアの自動生成（＆キーのダウンロード）<br>or 作成済みの公開キーのアップロード|
+|SSHキーの追加||キーペアの自動生成（＆キーのダウンロード）<br>※3台すべて同じキーペアを使用|
+
+※作成後、TargetVMのプライベートIPアドレスを控えておいてください。
 
 ・ここまでで以下の3台のComputeインスタンスを作成
 
-![CleanShot 2024-09-09 at 15 29 05](https://github.com/user-attachments/assets/51164911-05f3-4ec5-ab87-852cd010c2cd)
+![Computeインスタンス一覧](images/vtap/compute_instances.png)
 
 
 ### 2-4. 設定1. プライベートサブネットのセキュリティリスト編集( ping許可用)
 1. コンソールのナビゲーションメニューから [ネットワーキング]→ [仮想クラウド・ネットワーク]を選択
 2. 右ペインから、対象のVCNの名前部分をクリック
-3. 画面右下のサブネット一覧からプライベート・サブネットの名前部分をクリック
-4. 画面右下のセキュリティ・リストの名前部分をクリック
-5. イングレス・ルールの追加をクリック
+3. 画面上部の[サブネット]タブを選択し、画面下部からプライベートサブネットをクリック
+4. 画面上部の[セキュリティ]タブを選択し、画面下部のセキュリティリストの名前部分をクリック
+5. 画面上部の[セキュリティルール]タブを選択し、イングレス・ルールの追加をクリック
 6. 以下の設定で、Ping疎通の許可設定を作成。下記以外の部分はデフォルトのまま。
 
 |項目|設定値|
@@ -84,33 +85,51 @@
 |IPプロトコル|ICMP|
 |タイプ|8|
 
-![CleanShot 2024-09-09 at 15 41 40](https://github.com/user-attachments/assets/046411e3-aac7-482c-a90e-2f49895876e1)
+![セキュリティリスト イングレスルール追加](images/vtap/security_list_ingress_icmp.png)
 
 ### 2-5. 設定2. Ping受信サーバのファイアウォール停止
-1. Ping受信サーバ（ServerVM）にSSHログインする（ClientVMを踏み台にしてのSSH or CloudShellでのログイン)
+1. ServerVM（Ping受信サーバ）にSSHログインする（※ClientVMを踏み台にしてのCloud Shellでのログイン)
 2. 以下のコマンドを入力して、ServerVM内のファイアウォールを停止する
 
 ```
 sudo systemctl stop firewalld
 ```
 
+> **備考：Cloud ShellからClientVMを踏み台にしてプライベートサブネットのサーバにSSHする場合**
+>
+> プライベートサブネットのサーバ（ServerVM, TargetVM）にはパブリックIPがないため、ClientVMを踏み台（Bastion）として経由する必要があります。
+> 1. Cloud Shellにダウンロード済みの秘密鍵をアップロードします（Cloud Shell右上の歯車アイコン → アップロード）。
+> 2. アップロードした秘密鍵のパーミッションを変更します。
+>    ```
+>    chmod 600 <秘密鍵ファイル名>
+>    ```
+> 3. Cloud ShellからClientVMにSSHし、秘密鍵をClientVMにコピーします。
+>    ```
+>    scp -i <秘密鍵ファイル名> <秘密鍵ファイル名> opc@<ClientVMのパブリックIP>:~/.ssh/
+>    ```
+> 4. ClientVMにSSHログインし、同じ秘密鍵を使ってServerVMに接続します。
+>    ```
+>    ssh -i <秘密鍵ファイル名> opc@<ClientVMのパブリックIP>
+>    ssh -i ~/.ssh/<秘密鍵ファイル名> opc@<ServerVMのプライベートIP>
+>    ```
+
 ### 2-6. Ping受信確認
-1. パブリックサブネットのサーバ（ClientVM）にSSHログインする
+1. ClientVM（パブリックサブネット）にSSHログインする
 2. 以下のコマンドを入力して、Ping受信サーバにpingする。
 
 ```
-ping -c 5 10.0.1.2
+ping -c 5 <ServerVMのプライベートIP>
 ```
 
 3. 正常にコマンドが成功することを確認（5 packets transmitted, 5 received, 0% packet loss)
-![CleanShot 2024-09-09 at 16 21 29](https://github.com/user-attachments/assets/d4e6dca3-260a-4383-bf5a-47ca95010e0c)
+![Ping受信確認結果](images/vtap/ping_result_with_scp.png)
 
 
 
 ### 動作確認手順まとめ
 ここまででVTAPの動作確認の準備が完了です。
 
-![VTAP途中イメージ](https://github.com/user-attachments/assets/3f42f2fa-ce1f-4d87-9223-3153cabf531e)
+![VTAP途中イメージ](images/vtap/ping_diagram_with_key.png)
 
 
 
@@ -121,8 +140,8 @@ VTAPはミラーされたパケットを受け取るロードバランサ（NLB�
 ロードバランサの先にパケット受信用サーバ（2-3で作成済）が必要になります。
 
 ### 3-1. ターゲットサーバの設定その1(サーバ)
-1. パケット受信サーバ（TargetVM）にSSHログインする（ClientVMを踏み台にしてのSSH or CloudShellでのログイン)
-2. 以下のコマンドを入力して、ServerVM内のファイアウォールを停止する
+1. TargetVM（パケット受信サーバ）にSSHログインする（※ClientVMを踏み台にしてのCloud Shellでのログイン)
+2. 以下のコマンドを入力して、TargetVM内のファイアウォールを停止する
 
 ```
 sudo systemctl stop firewalld
@@ -149,15 +168,14 @@ while true; do (echo "response") | nc -lu 49152 -i 1; done > /dev/null 2>&1 &
 
 ### 3-2. ターゲットサーバの設定その２(VNIC)
 1. コンソールのナビゲーションメニューから [コンピュート]→ [インスタンス]を選択
-2. 右ペインのVTAP動作確認サーバ(TargetVM)の名前部分のリンクをクリック
-3. 画面下にスクロールして、左ペインの[アタッチされたVNIC]をクリック
-4. 画面右下、[アタッチされたVNIC]で一番右の[︙]→[VNICの編集]をクリック
+2. 右ペインのTargetVM（VTAP動作確認サーバ）の名前部分のリンクをクリック
+3. 画面上部の[ネットワーキング]タブを選択し、[アタッチされたVNIC]欄の名前部分一番右の[⋯]→[VNICの編集]をクリック
 
-![CleanShot 2024-09-09 at 16 37 45](https://github.com/user-attachments/assets/9c806a36-b03c-4402-b17e-82a156a28d6f)
+![VNIC編集メニュー](images/vtap/vnic_edit_menu.png)
 
 5. ソース/宛先チェックのスキップにチェックを入れて、変更の保存ボタンをクリック
 
-![CleanShot 2024-09-09 at 16 39 48](https://github.com/user-attachments/assets/151c1dd2-0395-4d1b-8e62-1d4ce1bf026a)
+![ソース宛先チェックのスキップ](images/vtap/vnic_skip_check.png)
 
 
 ### 3-３. ロードバランサの作成NLB
@@ -178,6 +196,7 @@ while true; do (echo "response") | nc -lu 49152 -i 1; done > /dev/null 2>&1 &
 |---|---|
 |リスナー名|NLB-listener|
 |トラフィックのタイプ|UDP|
+|タイムアウト|120|
 |イングレス・トラフィック・ポート|ポートを指定 → 4789 |
 
 ※VTAPはミラーしたパケットを4789に送信する仕様となっております。
@@ -188,20 +207,21 @@ while true; do (echo "response") | nc -lu 49152 -i 1; done > /dev/null 2>&1 &
 |---|---|---|
 |バックエンドセット名||backendset|
 |バックエンドの追加をクリック|バックエンド・タイプ|コンピュート・インスタンス|
+||IPアドレス|<当該コンピュートのプライベートIP>|
 ||コンピュートインスタンス|TargetVM|
 ||ポート| 49152 |
 |ヘルス・チェック・ポリシーの指定|プロトコル|UDP|
 ||リクエスト・データ| request |
 ||レスポンス・データ| response |
 
-![CleanShot 2024-09-09 at 16 55 57](https://github.com/user-attachments/assets/b4947e87-ea50-4e08-9a28-b8e5de9625fe)
+![NLBバックエンドヘルスチェック設定](images/vtap/nlb_backend_healthcheck.png)
 
 ### 3-4. プライベートサブネットのセキュリティリスト編集(vtap許可用)
 1. コンソールのナビゲーションメニューから [ネットワーキング]→ [仮想クラウド・ネットワーク]を選択
 2. 右ペインから、対象のVCNの名前部分をクリック
-3. 画面右下のサブネット一覧からプライベート・サブネットの名前部分をクリック
-4. 画面右下のセキュリティ・リストの名前部分をクリック
-5. イングレス・ルールの追加をクリック
+3. 画面上部の[サブネット]タブを選択し、画面下部のサブネット一覧からプライベート・サブネットの名前部分をクリック
+4. 画面上部の[セキュリティ]タブを選択し、画面下部のセキュリティ・リストの名前部分をクリック
+5. 画面上部の[セキュリティ・ルール]タブを選択し、イングレス・ルールの追加をクリック
 6. 以下の設定で、VTAP送受信の許可設定を作成。下記以外の部分はデフォルトのまま。
 
 |項目|設定値|
@@ -211,11 +231,36 @@ while true; do (echo "response") | nc -lu 49152 -i 1; done > /dev/null 2>&1 &
 |IPプロトコル|UDP|
 |宛先ポート範囲|4789,49152|
 
-![CleanShot 2024-09-09 at 17 37 46](https://github.com/user-attachments/assets/9a64638d-1a8a-46e5-b80e-220e802d1194)
+![セキュリティリスト VTAP用ルール](images/vtap/security_list_ingress_udp.png)
 
 
-### 3-5. VTAP作成
-1. コンソールのナビゲーションメニューから [ネットワーキング]→ [Network Command Center] → [VTAP]を選択
+### 3-5. 取得フィルタ作成
+1. コンソールのナビゲーションメニューから [ネットワーキング]→ [ネットワーク・コマンド・センター] → [取得フィルタ]を選択
+2. 右ペインの[取得フィルタの作成]をクリック
+3. 以下の設定で、取得フィルタを作成。下記以外の部分はデフォルトのまま。
+
+|項目|設定値|
+|---|---|
+|名前|ICMP-Filter|
+|コンパートメント|(作成済みのコンパートメント)|
+|フィルタタイプ|VTAPでの使用|
+|サンプリングレート|100%|
+
+ルールの追加をクリックし、以下の設定でルールを作成します。
+
+|項目|設定値|
+|---|---|
+|トラフィック|すべて|
+|包含/除外|含める|
+|ソースCIDR|10.0.0.0/24|
+|宛先CIDR|10.0.1.0/24|
+|IPプロトコル|ICMP|
+|ICMPタイプ|8 — エコー|
+|ICMPコード|0 — エコー・リクエスト|
+
+
+### 3-6. VTAP作成
+1. コンソールのナビゲーションメニューから [ネットワーキング]→ [ネットワーク・コマンド・センター] → [VTAP]を選択
 2. 右ペインの[VTAPの作成]をクリック
 3. 以下の設定で、VTAPを作成。下記以外の部分はデフォルトのまま。
 
@@ -226,10 +271,11 @@ while true; do (echo "response") | nc -lu 49152 -i 1; done > /dev/null 2>&1 &
 |VCN||(作成済みのVCN)|
 |ソース|ソース・タイプ|インスタンスVNIC|
 ||サブネット| (プライベートサブネット)|
-||VNIC|ServerVM(10.0.1.2)を指定|
-|ターゲット|サブネット|(プライベートサブネット)|
+||VNIC|ServerVMのVNICを指定|
+|ターゲット|リソース・タイプ|ネットワーク・ロード・バランサ|
+||サブネット|(プライベートサブネット)|
 ||ネットワーク・ロード・バランサ|（先ほど作成したロードバランサ）|
-|取得フィルタ|新規取得フィルタの作成||
+|取得フィルタ||(先程作成したフィルタ)|
 ||名前|ICMP-Filter|
 ||コンパートメント|(作成済みのコンパートメント)|
 ||トラフィックの方向|イングレス|
@@ -244,7 +290,7 @@ while true; do (echo "response") | nc -lu 49152 -i 1; done > /dev/null 2>&1 &
 作成完了後のVTAPは停止中となっているため、[起動]をクリックし、
 実行中になったことを確認する。
 
-![CleanShot 2024-09-09 at 17 49 51](https://github.com/user-attachments/assets/01e05fd1-1ac4-42da-935c-d163b5778a40)
+![VTAP起動画面](images/vtap/vtap_start.png)
 
 ここまででVTAP設定が完了しました。
 
@@ -254,22 +300,64 @@ while true; do (echo "response") | nc -lu 49152 -i 1; done > /dev/null 2>&1 &
 
 ## 4. 動作確認
 
-1. パブリックサブネット用VMのSSHと、TargetVM用の2画面を用意する。
-2. (TargetVM)以下のコマンドを実行して、ミラーリングされたパケットを可視化できるようにする。
+動作確認では、TargetVMでtcpdumpを実行しながら、ClientVMからpingを打つため、2つのSSHセッションが必要です。
+Cloud Shellでtmuxを使って画面分割を行います。
 
-```
-sudo tcpdump src host 10.0.1.2 -vv -i ens3
-```
+### 4-1. tmuxの起動と画面分割
+1. Cloud Shellで以下のコマンドを実行し、tmuxを起動します。
+   ```
+   tmux
+   ```
+2. tmux起動後、以下のキー操作で画面を左右に分割します。
+   - `Ctrl+B` を押した後、`%`（パーセント）を押す
+3. 左ペインと右ペインの2画面が表示されます。ペイン間の移動は以下のキー操作で行います。
+   - `Ctrl+B` を押した後、`←` または `→`（矢印キー）を押す
 
-3. (PublicVM)以下のコマンドを実行して、Ping受信サーバにPingを実行する
+### 4-2. 左ペイン：TargetVMでtcpdumpを実行
+1. 左ペインで、ClientVM経由でTargetVMにSSHログインします。
+   ```
+   ssh -i <秘密鍵ファイル名> opc@<ClientVMのパブリックIP>
+   ssh -i ~/.ssh/<秘密鍵ファイル名> opc@<TargetVMのプライベートIP>
+   ```
+2. NLBヘルスチェック用のUDPリスナーが起動しているか確認します。
+   ```
+   ss -uln | grep 49152
+   ```
+   出力がない場合はUDPリスナーが停止しています。以下のコマンドで再起動してください。
+   ```
+   while true; do (echo "response") | nc -lu 49152 -i 1; done > /dev/null 2>&1 &
+   ```
+   ※ NLBがTargetVMを正常と認識するまで1〜2分かかる場合があります。
+3. ネットワークインターフェース名を確認します。
+   ```
+   ip -br link
+   ```
+   ※ `lo` 以外のインターフェース名（例: `enp0s3` 等）を確認してください。
+4. 以下のコマンドを実行して、ミラーリングされたパケットを待ち受けます（`<NIC名>` は上記で確認した名前に置き換え）。
+   ```
+   sudo tcpdump src host <ServerVMのプライベートIP> -vv -i <NIC名>
+   ```
 
-```
-ping -c 5 10.0.1.2
-```
+### 4-3. 右ペイン：ClientVMからPingを実行
+1. `Ctrl+B` → `→` で右ペインに移動します。
+2. 右ペインで、ClientVMにSSHログインします。
+   ```
+   ssh -i <秘密鍵ファイル名> opc@<ClientVMのパブリックIP>
+   ```
+3. 以下のコマンドを実行して、ServerVM（Ping受信サーバ）にPingを送信します。
+   ```
+   ping -c 5 <ServerVMのプライベートIP>
+   ```
 
-4. (TargetVM）Pingの実行結果が見れるようになっていること（＝ミラーリング出来ていること）を確認する
+### 4-4. 結果確認
+1. 左ペイン（`Ctrl+B` → `←`）に戻り、TargetVMのtcpdump出力にPingパケットが表示されていることを確認します。
+   パケットが表示されていれば、VTAPによるミラーリングが正常に動作しています。
 
-![CleanShot 2024-09-09 at 19 55 14](https://github.com/user-attachments/assets/e9fd0e11-969d-4942-aeb6-e994d9253e1e)
+![tcpdump実行結果](https://github.com/user-attachments/assets/e9fd0e11-969d-4942-aeb6-e994d9253e1e)
+
+> **備考：tmuxの終了方法**
+> 動作確認が完了したら、各ペインで `exit` を入力してSSHセッションを閉じた後、`Ctrl+B` → `x` → `y` でペインを閉じます。
+> すべてのペインを閉じるとtmuxが自動的に終了します。
 
 
 
@@ -343,11 +431,11 @@ responseは、NLBで指定している。
  while true; do (echo "response") | nc -lu 49152 -i 1; done > /dev/null 2>&1 &
 
 (サーバ・インスタンスからミラーリングされて流れてくるパケットを待ち受けます)
- sudo tcpdump src host 10.0.1.2 -vv -i ens3
+ sudo tcpdump src host <ServerVMのプライベートIP> -vv -i <NIC名>
 
 > src host HOST	パケットの送信元ホストがHOSTであれば真
 > -vv	-vよりも詳細に出力する（NFS応答パケットの追加フィールドなども表示される）
 > -i INTERFACE	ネットワーク・インターフェースINTERFACEを監視する
-> linuxのデフォルトのNIC名はens3
+> NIC名はOSバージョンやシェイプによって異なるため、`ip -br link` で確認する
 
  -->
